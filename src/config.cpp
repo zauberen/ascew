@@ -5,9 +5,10 @@
 #include <fstream> // for reading .ascew
 #include <iostream>
 #include <iomanip>
-#include <windows.h> // for system()
+#include <windows.h> // for system() and other (less scandalous) methods
 #include <direct.h> // finds current working directory
 #include <string> // for string functions
+#include <stdlib.h> // atoi
 #include <sstream> // for parsing .ascew
 #include <vector> // for vectors
 
@@ -34,12 +35,13 @@ _path SetPath()
     
     if(ifile)
     {
-                //get the variables
-        string sLine;
-        int iCount = 0;
-        string sTemp;
-        int temp = 0;
-
+        //get the variables
+        string sLine; // Holds each line as the file is read
+        int iCount = 0; // Holds the amount of variables read
+        string sTemp; // Holds each specific part to each line as it's parsed
+        int temp = 0; // counts the number of parts pased per line.
+        bool bSet[] = {false, false, false}; // Checks if colors are set
+        int iRGBcolor = 0; // holds the color index
         
         while(getline(ifile,sLine))
         {
@@ -47,7 +49,49 @@ _path SetPath()
             
             if(sLine[0] == '#')
             {
-                // The line is a comment
+                iss >> sTemp;
+                if(sTemp == "#color=")
+                {
+                    iss >> sTemp;
+                    iRGBcolor = atoi(sTemp.c_str());
+                    if (iRGBcolor < 16)
+                    {
+                        path.iColor = iRGBcolor;
+                    }
+                    else
+                    {
+                        path.iColor = 15;
+                    }
+                    bSet[0] = true;
+                }
+                else if(sTemp == "#bgcolor=")
+                {
+                    iss >> sTemp;
+                    iRGBcolor = atoi(sTemp.c_str());
+                    if (iRGBcolor < 16)
+                    {
+                        path.iBgcolor = iRGBcolor;
+                    }
+                    else
+                    {
+                        path.iBgcolor = 0;
+                    }
+                    bSet[1] = true;
+                }
+                else if(sTemp == "#dircolor=")
+                {
+                    iss >> sTemp;
+                    iRGBcolor = atoi(sTemp.c_str());
+                    if (iRGBcolor < 16)
+                    {
+                        path.iDircolor = iRGBcolor;
+                    }
+                    else
+                    {
+                        path.iDircolor = 12;
+                    }
+                    bSet[2] = true;
+                }
             }
             else if(sLine.empty())
             {
@@ -89,6 +133,18 @@ _path SetPath()
             }
         }
         
+        if(!bSet[0])
+        {
+            path.iColor = 15;
+        }
+        if(!bSet[1])
+        {
+            path.iBgcolor = 0;
+        }
+        if(!bSet[2])
+        {
+            path.iDircolor = 12;
+        }
 
         // Determines if there are errors in the .ascew file
         if(path.sExecutable.size() == path.sAlias.size())
@@ -156,5 +212,16 @@ _path SetPath()
         }
         
     }
+    else
+    {
+        // RGB values are ALWAYS set
+        path.iColor = 15;
+        path.iBgcolor = 0;
+        path.iDircolor = 12;
+    }
+
+    path.iColor = path.iColor + path.iBgcolor * 16;
+    path.iDircolor = path.iDircolor + path.iBgcolor * 16;
+    
     return path;
 }

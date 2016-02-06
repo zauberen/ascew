@@ -7,6 +7,7 @@
 #include <windows.h> // for system()
 #include <direct.h> // finds current working directory
 #include <string> // for string functions
+#include <sstream>
 #include <vector> // for vectors
 
 #include "config.h" // Everything for .ascew files
@@ -15,10 +16,14 @@ using namespace std;
 
 int main()
 {
-    const double VERSION = 1.30; // Build version number. Patch updates aren't displayed
-    const double UPDATE = 0; // Updates since last version
+    HANDLE hConsole; // Handle for console colors
+    string sTempColorVar = "color ";
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     
-    const std::string AUTHOR = "dandreas (belfieldcecil@gmail.com)";
+    const double VERSION = 1.30; // Build version number. Patch updates aren't displayed
+    const double UPDATE = 1; // Updates since last version
+    
+    const std::string AUTHOR = "dandreas (GitHub)";
     
     _path pPath = SetPath(); // Grabs settings from the local settings file
     
@@ -29,10 +34,13 @@ int main()
     sDirectory = _getcwd(NULL, 0); // Gets the directory
     sTitle = "SCEW " + sDirectory;
     SetConsoleTitle(sTitle.c_str()); // Sets the console name
+
+    SetConsoleTextAttribute(hConsole,pPath.iColor);
+    system("cls");
     
     cout << "A Simple Console Emulator for Windows (ASCEW) v" << VERSION << "u" << UPDATE << endl
-         << "Made by: " << AUTHOR << "\n"
-         << "NOTE: Some commands may not work as intended.\nTo avoid most complications, do all commands on seperate lines." << "\n" << "\n";
+         << "Made by: " << AUTHOR
+         << "\n" << "\n";
 
     // Any pre-execution debug stuff should be put in here
     if (DEBUG)
@@ -43,17 +51,24 @@ int main()
     while(true)
     {
         bool bCustom = false; // Tells if a custom command is being used
-        
+
+        SetConsoleTextAttribute(hConsole,pPath.iDircolor);
         cout << sDirectory << ">";
+        SetConsoleTextAttribute(hConsole,pPath.iColor);
         getline(cin,sInput);
         
         // If there isn't a config file, skip the whole jazz
         if(pPath.bIsActive)
         {
+            // Only checks the actual command
+            stringstream ss;
+            ss << sInput;
+            string sTemp;
+            ss >> sTemp;
             // Tests if the command is a custom made command
             for(int i = 0; i < pPath.count; i++)
             {
-                if(sInput == pPath.sAlias[i])
+                if(sTemp == pPath.sAlias[i])
                 {
                     bCustom = true; // Switches the custom option on
                     sInput = pPath.sExecutable[i]; // Auto-sets the user input to the location of the executable
@@ -101,4 +116,3 @@ int main()
         cout << endl;
     }
 }
-
