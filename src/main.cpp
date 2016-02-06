@@ -1,34 +1,22 @@
 // Title: SCEW (Simple Console Emulator for Windows)
-// Author: Dillon Andreas
+// Author: dandreas
 // Description: 'Emulates' a windows console, useful for systems that restrict the use of cmd.exe.
 
-#include <fstream> // for reading .scew
 #include <iostream>
 #include <iomanip>
 #include <windows.h> // for system()
 #include <direct.h> // finds current working directory
 #include <string> // for string functions
-#include <sstream> // for parsing .scew
 #include <vector> // for vectors
 
+#include "config.h" // Everything for .ascew files
+
 using namespace std;
-
-const bool DEBUG = false; // Enables debug mode to inspect the IO properties
-
-typedef struct
-{
-    bool bIsActive; // Tells if there is a config file present
-    int count; // The (base 1) amount of items in the sExecutable array
-    vector<string> sExecutable; // Paths to the files in relation to to executable. eg ../../nano/nano.exe
-    vector<string> sAlias; // Alias to the related executable, eg "nano" for the above example
-} _path;
-
-_path SetPath(); // Sets up the _path struct
 
 int main()
 {
     const double VERSION = 1.20; // Build version number. Patch updates aren't displayed
-    const double UPDATE = 3; // Updates since last version
+    const double UPDATE = 4; // Updates since last version
     
     const std::string AUTHOR = "dandreas (belfieldcecil@gmail.com)";
     
@@ -42,7 +30,7 @@ int main()
     sTitle = "SCEW " + sDirectory;
     SetConsoleTitle(sTitle.c_str()); // Sets the console name
     
-    cout << "Simple Console Emulator for Windows (SCEW) v" << VERSION << "u" << UPDATE << endl
+    cout << "A Simple Console Emulator for Windows (ASCEW) v" << VERSION << "u" << UPDATE << endl
          << "Made by: " << AUTHOR << "\n"
          << "NOTE: Some commands may not work as intended.\nTo avoid most complications, do all commands on seperate lines." << "\n" << "\n";
 
@@ -114,70 +102,3 @@ int main()
     }
 }
 
-_path SetPath()
-{
-    _path path;
-    path.bIsActive = false;
-    
-    ifstream ifile(".scew");
-    if(ifile)
-    {
-        //get the variables
-        string sLine;
-        int iCount = 0;
-        string sTemp;
-        int temp = 0;
-
-        
-        while(getline(ifile,sLine))
-        {
-            istringstream iss(sLine);
-            
-            if(sLine[0] == '#')
-            {
-                // The line is a comment
-            }
-            else
-            {
-                do
-                {
-                    iss >> sTemp;
-                    
-                    if(sTemp != "")
-                    {
-                        if (temp == 0)
-                        {
-                            if (DEBUG)
-                            {
-                                cout << sTemp << iCount << endl;
-                            }
-                            
-                            path.sExecutable.push_back(sTemp);
-                            temp++; // 1
-                        }
-                        else if (temp == 1)
-                        {
-                            if (DEBUG)
-                            {
-                                cout << sTemp << iCount << endl;
-                            }
-                            
-                            path.sAlias.push_back(sTemp);
-                            iCount++;
-                            temp++; // 2
-                        }
-                        else if (temp == 2)
-                        {
-                            temp = 0;
-                        }
-                    }
-                }
-                while (iss);
-            }
-        }
-        
-        path.count = iCount;
-        path.bIsActive = true;
-    }
-    return path;
-}

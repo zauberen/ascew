@@ -1,16 +1,19 @@
 # This is an example of a skew config file
 # Use the # mark at the beginning of a line for a comment, it must be the first character in the new line
-# Also use the # symbol to add space to your .scew, adding newlines currently (build 1.2u3) screws up the system
 # Format your aliases like this: <ExecutablePath>/executable.exe <Alias>
 # Neither executable paths & names or aliases can have spaces
-#
+
 # ls function in UNIX
 dir ls
+
 # runs the nano text editor
 F:\nano-2.5.1\nano-2.5.1-win32\nano.exe nano
+
 # runs emacs
 F:/Emacs/Emacs24.5/bin/runemacs.exe emacs
+
 # linux translation of ipconfig
 ipconfig ifconfig
+
 # Clear UNIX command
 cls clear
