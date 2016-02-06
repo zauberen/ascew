@@ -15,8 +15,8 @@ using namespace std;
 
 int main()
 {
-    const double VERSION = 1.20; // Build version number. Patch updates aren't displayed
-    const double UPDATE = 4; // Updates since last version
+    const double VERSION = 1.30; // Build version number. Patch updates aren't displayed
+    const double UPDATE = 0; // Updates since last version
     
     const std::string AUTHOR = "dandreas (belfieldcecil@gmail.com)";
     
