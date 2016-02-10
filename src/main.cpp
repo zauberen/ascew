@@ -32,7 +32,7 @@ int main()
     std::string sDirectory = ""; // Stores the working directory
     
     sDirectory = _getcwd(NULL, 0); // Gets the directory
-    sTitle = "SCEW " + sDirectory;
+    sTitle = "ascew " + sDirectory;
     SetConsoleTitle(sTitle.c_str()); // Sets the console name
 
     SetConsoleTextAttribute(hConsole,pPath.iColor);
@@ -92,7 +92,7 @@ int main()
 
                 // Set the directory variable, reset console title
                 sDirectory = _getcwd(NULL, 0);
-                sTitle = "SCEW " + sDirectory;
+                sTitle = "ascew " + sDirectory;
                 SetConsoleTitle(sTitle.c_str());
 
                 cout << sDirectory << endl; // emulate actual cd output
