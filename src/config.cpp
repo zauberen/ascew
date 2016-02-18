@@ -16,8 +16,6 @@
 
 using namespace std;
 
-_path Read(); // Does everything but 
-
 _path SetPath()
 {
     _path path;
@@ -102,12 +100,19 @@ _path SetPath()
                 do
                 {
                     iss >> sTemp;
-                                        
+
+                    // Splits the executable path from the alias, 0 = executable, 1 = alias
                     if (temp == 0)
                     {
                         if (DEBUG)
                         {
                             cout << sTemp << iCount << endl;
+                        }
+                        
+                        // Allows programs (when run off a flash drive) to be dynamic
+                        if(sTemp[0] == ':' && sTemp[1] == '/' || sTemp[0] == ':' && sTemp[1] == '\\')
+                        {
+                            sTemp = path.sOrigin[0] + sTemp;
                         }
                         
                         path.sExecutable.push_back(sTemp);

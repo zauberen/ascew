@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
     }
     
     const double VERSION = 1.30; // Build version number. Patch updates aren't displayed
-    const double UPDATE = 2; // Updates since last version
+    const double UPDATE = 3; // Updates since last version
     
     const std::string AUTHOR = "dandreas (GitHub)";
 
@@ -134,6 +134,11 @@ int main(int argc, char* argv[])
                     {
                         bCustom = true; // Switches the custom option on
                         sInput = pPath.sExecutable[i]; // Auto-sets the user input to the location of the executable
+                        while(ss)
+                        {
+                            ss >> sTemp;
+                            sInput += " " + sTemp;
+                        }
                     }
                 }
             }
