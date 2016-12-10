@@ -37,7 +37,6 @@ _path SetPath()
         string sLine; // Holds each line as the file is read
         int iCount = 0; // Holds the amount of variables read
         string sTemp; // Holds each specific part to each line as it's parsed
-        int temp = 0; // counts the number of parts pased per line.
         bool bSet[] = {false, false, false}; // Checks if colors are set
         int iRGBcolor = 0; // holds the color index
 
@@ -96,46 +95,20 @@ _path SetPath()
                 // The line is empty
             }
             else
-            {
-				// TODO: Redo this, the do while loop is redundant, and could cause issues if someone added a comment or something after it.
-                do
+            { // Stores the first two words of text as an executable path, then alias
+                iss >> sTemp;
+                // Allows programs (when run off a flash drive) to be dynamic
+                if(sTemp[0] == ':' && sTemp[1] == '/' || sTemp[1] == '\\')
                 {
-                    iss >> sTemp;
-
-                    // Splits the executable path from the alias, 0 = executable, 1 = alias
-                    if (temp == 0)
-                    {
-                        if (DEBUG)
-                        {
-                            cout << sTemp << iCount << endl;
-                        }
-
-                        // Allows programs (when run off a flash drive) to be dynamic
-                        if(sTemp[0] == ':' && sTemp[1] == '/' || sTemp[0] == ':' && sTemp[1] == '\\')
-                        {
-                            sTemp = path.sOrigin[0] + sTemp;
-                        }
-
-                        path.sExecutable.push_back(sTemp);
-                        temp++; // 1
-                    }
-                    else if (temp == 1)
-                    {
-                        if (DEBUG)
-                        {
-                            cout << sTemp << iCount << endl;
-                        }
-
-                        path.sAlias.push_back(sTemp);
-                        iCount++;
-                        temp++; // 2
-                    }
-                    else if (temp == 2)
-                    {
-                        temp = 0;
-                    }
+                    sTemp = path.sOrigin[0] + sTemp;
                 }
-                while (iss);
+
+                path.sExecutable.push_back(sTemp);
+
+				iss >> sTemp;
+
+                path.sAlias.push_back(sTemp);
+                iCount++;
             }
         }
 

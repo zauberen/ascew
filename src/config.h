@@ -3,8 +3,6 @@
 
 #include <vector>
 
-const bool DEBUG = false; // Enables debug mode to inspect the IO properties
-
 // This struct stores the applications special path, set up in the .ascew file
 typedef struct
 {

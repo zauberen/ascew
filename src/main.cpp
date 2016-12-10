@@ -2,13 +2,14 @@
 // Author: dandreas
 // Description: 'Emulates' a windows console, useful for systems that restrict the use of cmd.exe.
 
+#include <algorithm> // for find_if and bind1st (used to trim whitespace from input)
+#include <direct.h> // for finding the current working directory
 #include <iostream>
 #include <iomanip>
-#include <windows.h> // for system()
-#include <direct.h> // finds current working directory
 #include <string> // for string functions
-#include <sstream>
-#include <vector> // for vectors
+#include <sstream> // for stringstream, used in various places
+#include <vector> // for vector, used in various places
+#include <windows.h> // for system() and cosmetic functions
 
 #include "config.h" // Everything for .ascew files
 
@@ -19,6 +20,7 @@ int main(int argc, char* argv[])
     // Startup command checks
     bool bBasic = false; // if true, runs the most basic console emulator, skips reading any configuration files, etc.
     bool bNoText = false; // if true, hides the opening text
+	bool DEBUG = false; // Enables debug mode to inspect the IO properties
 
     if(argc > 1)
     {
@@ -33,18 +35,22 @@ int main(int argc, char* argv[])
 
             if(sArg == "-h")
             {
-                // Eventually, a help function, currently just displays help
+                // Eventually, a help function, currently just displays help & exits
                 system("help");
                 return 0;
             }
             else if(sArg == "-b")
-            {
+            { // turns on basic mode, no colours, no config reading
                 bBasic = true;
             }
             else if(sArg == "-nt")
-            {
+            { // no greeting text
                 bNoText = true;
             }
+			else if(sArg == "-d")
+			{ // turns on debug mode
+				DEBUG = true;
+			}
 
         }
     }
@@ -56,7 +62,7 @@ int main(int argc, char* argv[])
         hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     }
 
-    const double VERSION = 1.30; // Build version number. Patch updates aren't displayed
+    const double VERSION = 1.30; // Version number, used for releases.
 
     const std::string AUTHOR = "dandreas";
 
@@ -105,15 +111,22 @@ int main(int argc, char* argv[])
     {
         bool bCustom = false; // Tells if a custom command is being used
 
+		// Change color to the directory colour (if applicable)
         if(!bBasic)
         {
             SetConsoleTextAttribute(hConsole,pPath.iDircolor);
         }
+
+		// Output the current directory
         cout << sDirectory << ">";
+
+		// Change color to input text colour (if applicable)
         if(!bBasic)
         {
             SetConsoleTextAttribute(hConsole,pPath.iColor);
         }
+
+		// Grab user input
         getline(cin,sInput);
 
         if(!bBasic)
@@ -121,23 +134,30 @@ int main(int argc, char* argv[])
             // If there isn't a config file, skip the whole jazz
             if(pPath.bIsActive)
             {
+				// Trim leading whitespace on sInput (causes issues down the line) credit: http://stackoverflow.com/questions/1798112/removing-leading-and-trailing-spaces-from-a-string
+				sInput.erase(sInput.begin(), std::find_if(sInput.begin(), sInput.end(), std::bind1st(std::not_equal_to<char>(), ' ')));
+
                 // Only checks the actual command
                 stringstream ss;
                 ss << sInput;
                 string sTemp;
                 ss >> sTemp;
+
                 // Tests if the command is a custom made command
                 for(int i = 0; i < pPath.count; i++)
                 {
-                    if(sTemp == pPath.sAlias[i])
+                    if(sTemp == pPath.sAlias[i] && !bCustom)
                     {
                         bCustom = true; // Switches the custom option on
-                        sInput = pPath.sExecutable[i]; // Auto-sets the user input to the location of the executable
-                        while(ss)
-                        {
-                            ss >> sTemp;
-                            sInput += " " + sTemp;
-                        }
+						if(sInput.length() == sTemp.length())
+						{
+                        	sInput = pPath.sExecutable[i]; // Sets the user input to the location of the executable
+						}
+						else
+						{
+							sTemp = sInput.substr(sInput.find_first_of(" \t") + 1);
+							sInput = pPath.sExecutable[i] + " " + sTemp;
+						}
                     }
                 }
             }
@@ -148,6 +168,11 @@ int main(int argc, char* argv[])
         {
             // Runs the user's specified executable
             system(sInput.c_str());
+			if(DEBUG)
+			{
+				cout << "DEBUG FEED" << endl
+					 << "sInput = " << sInput << endl;
+			}
         }
         else if(sInput[0] == 'c' && sInput[1] == 'd' && sInput[2] == ' ')
         {
