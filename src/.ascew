@@ -25,7 +25,7 @@ dir ls
 # runs emacs (flash drive)
 :/Emacs/Emacs24.5/bin/runemacs.exe emacs
 
-# linux translation of ipconfig
+# Translation of ipconfig
 ipconfig ifconfig
 
 # Clear UNIX command
@@ -33,6 +33,6 @@ cls clear
 
 # Compilers (flash drive)
 # g++
-:\MinGW\bin\g++.exe
+:\MinGW\bin\g++.exe g++
 # gcc
-:\MinGW\bin\gcc.exe
+:\MinGW\bin\gcc.exe gcc

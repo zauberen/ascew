@@ -1,4 +1,4 @@
-// Title: SCEW (Simple Console Emulator for Windows)
+// Title: ASCEW (Simple Console Emulator for Windows)
 // Author: dandreas
 // Description: 'Emulates' a windows console, useful for systems that restrict the use of cmd.exe.
 
@@ -19,18 +19,18 @@ int main(int argc, char* argv[])
     // Startup command checks
     bool bBasic = false; // if true, runs the most basic console emulator, skips reading any configuration files, etc.
     bool bNoText = false; // if true, hides the opening text
-    
+
     if(argc > 1)
     {
         for(int i = 0;i < argc;i++)
         {
             string sArg = std::string(argv[i]);
-            
+
             if(DEBUG)
             {
                 cout << "Args: " << sArg << endl;
             }
-            
+
             if(sArg == "-h")
             {
                 // Eventually, a help function, currently just displays help
@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
             {
                 bNoText = true;
             }
-                
+
         }
     }
 
@@ -55,23 +55,22 @@ int main(int argc, char* argv[])
     {
         hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     }
-    
+
     const double VERSION = 1.30; // Build version number. Patch updates aren't displayed
-    const double UPDATE = 3; // Updates since last version
-    
-    const std::string AUTHOR = "dandreas (GitHub)";
+
+    const std::string AUTHOR = "dandreas";
 
     _path pPath;
-    
+
     if(!bBasic)
     {
         pPath = SetPath(); // Grabs settings from the local settings file
     }
-    
+
     std::string sInput = ""; // Stores the user input
     std::string sTitle = ""; // Title for the application
     std::string sDirectory = ""; // Stores the working directory
-    
+
     sDirectory = _getcwd(NULL, 0); // Gets the directory
     sTitle = "ascew " + sDirectory;
     SetConsoleTitle(sTitle.c_str()); // Sets the console name
@@ -84,7 +83,7 @@ int main(int argc, char* argv[])
 
     if(!bNoText)
     {
-        cout << "A Simple Console Emulator for Windows (ASCEW) v" << VERSION << "u" << UPDATE << endl
+        cout << "A Simple Console Emulator for Windows (ASCEW) v" << VERSION << endl
              << "Made by: " << AUTHOR
              << "\n" << "\n";
     }
@@ -101,11 +100,11 @@ int main(int argc, char* argv[])
             cout << "Custom commands are disabled." << endl;
         }
     }
-    
+
     while(true)
     {
         bool bCustom = false; // Tells if a custom command is being used
-        
+
         if(!bBasic)
         {
             SetConsoleTextAttribute(hConsole,pPath.iDircolor);
@@ -143,7 +142,7 @@ int main(int argc, char* argv[])
                 }
             }
         }
-        
+
         // Runs the appropriate function per the user's input
         if(bCustom)
         {
@@ -180,7 +179,7 @@ int main(int argc, char* argv[])
             // Runs the user input in cmd (hopefully) bypassing any console locks
             system(sInput.c_str());
         }
-        
+
         cout << endl;
     }
 }

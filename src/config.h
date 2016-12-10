@@ -5,6 +5,7 @@
 
 const bool DEBUG = false; // Enables debug mode to inspect the IO properties
 
+// This struct stores the applications special path, set up in the .ascew file
 typedef struct
 {
     std::string sOrigin; // Stores the start directory of the application
@@ -17,6 +18,6 @@ typedef struct
     int iDircolor; // Directory output color
 } _path;
 
-_path SetPath(); // Sets up the _path struct
+_path SetPath(); // Sets up the _path struct using the .ascew file (if present)
 
 #endif
