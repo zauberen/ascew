@@ -16,9 +16,12 @@
 
 using namespace std;
 
+<<<<<<< HEAD
 // I have no idea what this function was supposed to be for...
 // _path Read(); // Does everything but
 
+=======
+>>>>>>> origin/master
 _path SetPath()
 {
     _path path; // The return variable, set throughout the remainder of the application
@@ -107,13 +110,27 @@ _path SetPath()
                 { // Iterates through the line, reading executable paths to their vector, then alias' to their vector
                     iss >> sTemp;
 
+<<<<<<< HEAD
+=======
+                    // Splits the executable path from the alias, 0 = executable, 1 = alias
+>>>>>>> origin/master
                     if (temp == 0)
                     {
                         if (DEBUG)
                         {
                             cout << sTemp << iCount << endl;
                         }
+<<<<<<< HEAD
 
+=======
+                        
+                        // Allows programs (when run off a flash drive) to be dynamic
+                        if(sTemp[0] == ':' && sTemp[1] == '/' || sTemp[0] == ':' && sTemp[1] == '\\')
+                        {
+                            sTemp = path.sOrigin[0] + sTemp;
+                        }
+                        
+>>>>>>> origin/master
                         path.sExecutable.push_back(sTemp);
                         temp++; // 1
                     }

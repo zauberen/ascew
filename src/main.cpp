@@ -14,9 +14,44 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
+    // Startup command checks
+    bool bBasic = false; // if true, runs the most basic console emulator, skips reading any configuration files, etc.
+    bool bNoText = false; // if true, hides the opening text
+    
+    if(argc > 1)
+    {
+        for(int i = 0;i < argc;i++)
+        {
+            string sArg = std::string(argv[i]);
+            
+            if(DEBUG)
+            {
+                cout << "Args: " << sArg << endl;
+            }
+            
+            if(sArg == "-h")
+            {
+                // Eventually, a help function, currently just displays help
+                system("help");
+                return 0;
+            }
+            else if(sArg == "-b")
+            {
+                bBasic = true;
+            }
+            else if(sArg == "-nt")
+            {
+                bNoText = true;
+            }
+                
+        }
+    }
+
+    // End startup
     HANDLE hConsole; // Handle for console colors
+<<<<<<< HEAD
     string sTempColorVar = "color ";
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -26,11 +61,31 @@ int main()
 
     _path pPath = SetPath(); // Grabs settings from the local settings file
 
+=======
+    if(!bBasic)
+    {
+        hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    }
+    
+    const double VERSION = 1.30; // Build version number. Patch updates aren't displayed
+    const double UPDATE = 3; // Updates since last version
+    
+    const std::string AUTHOR = "dandreas (GitHub)";
+
+    _path pPath;
+    
+    if(!bBasic)
+    {
+        pPath = SetPath(); // Grabs settings from the local settings file
+    }
+    
+>>>>>>> origin/master
     std::string sInput = ""; // Stores the user input
     std::string sTitle = ""; // Title for the application
     std::string sDirectory = ""; // Stores the working directory
 
     sDirectory = _getcwd(NULL, 0); // Gets the directory
+<<<<<<< HEAD
     sTitle = "ASCEW " + sDirectory;
     SetConsoleTitle(sTitle.c_str()); // Sets the console name
 
@@ -40,37 +95,80 @@ int main()
     cout << "A Simple Console Emulator for Windows (ASCEW) v" << VERSION << endl
          << "Made by: " << AUTHOR
          << "\n" << "\n";
+=======
+    sTitle = "ascew " + sDirectory;
+    SetConsoleTitle(sTitle.c_str()); // Sets the console name
+
+    if(!bBasic)
+    {
+        SetConsoleTextAttribute(hConsole,pPath.iColor);
+        system("cls");
+    }
+
+    if(!bNoText)
+    {
+        cout << "A Simple Console Emulator for Windows (ASCEW) v" << VERSION << "u" << UPDATE << endl
+             << "Made by: " << AUTHOR
+             << "\n" << "\n";
+    }
+>>>>>>> origin/master
 
     // Any pre-execution debug stuff should be put in here
     if (DEBUG)
     {
-        cout << "Number of custom commands: " <<  pPath.count << "\n";
+        if(!bBasic)
+        {
+            cout << "Number of custom commands: " <<  pPath.count << "\n";
+        }
+        else
+        {
+            cout << "Custom commands are disabled." << endl;
+        }
     }
 
     while(true)
     {
         bool bCustom = false; // Tells if a custom command is being used
-
-        SetConsoleTextAttribute(hConsole,pPath.iDircolor);
+        
+        if(!bBasic)
+        {
+            SetConsoleTextAttribute(hConsole,pPath.iDircolor);
+        }
         cout << sDirectory << ">";
-        SetConsoleTextAttribute(hConsole,pPath.iColor);
+        if(!bBasic)
+        {
+            SetConsoleTextAttribute(hConsole,pPath.iColor);
+        }
         getline(cin,sInput);
 
+<<<<<<< HEAD
         // If there isn't a config file, skip the whole jazz
         if(pPath.bIsActive)
+=======
+        if(!bBasic)
+>>>>>>> origin/master
         {
-            // Only checks the actual command
-            stringstream ss;
-            ss << sInput;
-            string sTemp;
-            ss >> sTemp;
-            // Tests if the command is a custom made command
-            for(int i = 0; i < pPath.count; i++)
+            // If there isn't a config file, skip the whole jazz
+            if(pPath.bIsActive)
             {
-                if(sTemp == pPath.sAlias[i])
+                // Only checks the actual command
+                stringstream ss;
+                ss << sInput;
+                string sTemp;
+                ss >> sTemp;
+                // Tests if the command is a custom made command
+                for(int i = 0; i < pPath.count; i++)
                 {
-                    bCustom = true; // Switches the custom option on
-                    sInput = pPath.sExecutable[i]; // Auto-sets the user input to the location of the executable
+                    if(sTemp == pPath.sAlias[i])
+                    {
+                        bCustom = true; // Switches the custom option on
+                        sInput = pPath.sExecutable[i]; // Auto-sets the user input to the location of the executable
+                        while(ss)
+                        {
+                            ss >> sTemp;
+                            sInput += " " + sTemp;
+                        }
+                    }
                 }
             }
         }
@@ -91,7 +189,7 @@ int main()
 
                 // Set the directory variable, reset console title
                 sDirectory = _getcwd(NULL, 0);
-                sTitle = "SCEW " + sDirectory;
+                sTitle = "ascew " + sDirectory;
                 SetConsoleTitle(sTitle.c_str());
 
                 cout << sDirectory << endl; // emulate actual cd output
