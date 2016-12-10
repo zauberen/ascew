@@ -5,7 +5,6 @@
 
 const bool DEBUG = false; // Enables debug mode to inspect the IO properties
 
-// This struct holds the custom path variable set by the .ascew config file.
 typedef struct
 {
     std::string sOrigin; // Stores the start directory of the application

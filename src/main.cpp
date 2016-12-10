@@ -1,4 +1,4 @@
-// Title: ASCEW (A Simple Console Emulator for Windows)
+// Title: SCEW (Simple Console Emulator for Windows)
 // Author: dandreas
 // Description: 'Emulates' a windows console, useful for systems that restrict the use of cmd.exe.
 
@@ -51,17 +51,6 @@ int main(int argc, char* argv[])
 
     // End startup
     HANDLE hConsole; // Handle for console colors
-<<<<<<< HEAD
-    string sTempColorVar = "color ";
-    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    const double VERSION = 1.50; // Build version number. Patch updates aren't displayed
-
-    const std::string AUTHOR = "dandreas";
-
-    _path pPath = SetPath(); // Grabs settings from the local settings file
-
-=======
     if(!bBasic)
     {
         hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -79,23 +68,11 @@ int main(int argc, char* argv[])
         pPath = SetPath(); // Grabs settings from the local settings file
     }
     
->>>>>>> origin/master
     std::string sInput = ""; // Stores the user input
     std::string sTitle = ""; // Title for the application
     std::string sDirectory = ""; // Stores the working directory
-
+    
     sDirectory = _getcwd(NULL, 0); // Gets the directory
-<<<<<<< HEAD
-    sTitle = "ASCEW " + sDirectory;
-    SetConsoleTitle(sTitle.c_str()); // Sets the console name
-
-    SetConsoleTextAttribute(hConsole,pPath.iColor);
-    system("cls");
-
-    cout << "A Simple Console Emulator for Windows (ASCEW) v" << VERSION << endl
-         << "Made by: " << AUTHOR
-         << "\n" << "\n";
-=======
     sTitle = "ascew " + sDirectory;
     SetConsoleTitle(sTitle.c_str()); // Sets the console name
 
@@ -111,7 +88,6 @@ int main(int argc, char* argv[])
              << "Made by: " << AUTHOR
              << "\n" << "\n";
     }
->>>>>>> origin/master
 
     // Any pre-execution debug stuff should be put in here
     if (DEBUG)
@@ -125,7 +101,7 @@ int main(int argc, char* argv[])
             cout << "Custom commands are disabled." << endl;
         }
     }
-
+    
     while(true)
     {
         bool bCustom = false; // Tells if a custom command is being used
@@ -141,12 +117,7 @@ int main(int argc, char* argv[])
         }
         getline(cin,sInput);
 
-<<<<<<< HEAD
-        // If there isn't a config file, skip the whole jazz
-        if(pPath.bIsActive)
-=======
         if(!bBasic)
->>>>>>> origin/master
         {
             // If there isn't a config file, skip the whole jazz
             if(pPath.bIsActive)
@@ -172,7 +143,7 @@ int main(int argc, char* argv[])
                 }
             }
         }
-
+        
         // Runs the appropriate function per the user's input
         if(bCustom)
         {
@@ -209,7 +180,7 @@ int main(int argc, char* argv[])
             // Runs the user input in cmd (hopefully) bypassing any console locks
             system(sInput.c_str());
         }
-
+        
         cout << endl;
     }
 }

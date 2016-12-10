@@ -16,46 +16,40 @@
 
 using namespace std;
 
-<<<<<<< HEAD
-// I have no idea what this function was supposed to be for...
-// _path Read(); // Does everything but
-
-=======
->>>>>>> origin/master
 _path SetPath()
 {
-    _path path; // The return variable, set throughout the remainder of the application
-    path.sOrigin = _getcwd(NULL, 0); // Sets the origin directory
-    path.bIsActive = false; // Assumes there isn't a config file (changed later if neccissary)
+    _path path;
+    path.sOrigin = _getcwd(NULL, 0);
+    path.bIsActive = false;
     path.count = 0;
-
+    
     ifstream ifile(".ascew");
-
+    
     if(!ifile)
     {
-		// If the local file doesn't exist, check if there is one in the home directory
         ifile.close();
-        ifile.open("%USERPROFILE%/.ascew");
+        ifile.open(".scew");
     }
-
+    
     if(ifile)
-    { //get the variables
+    {
+        //get the variables
         string sLine; // Holds each line as the file is read
         int iCount = 0; // Holds the amount of variables read
         string sTemp; // Holds each specific part to each line as it's parsed
         int temp = 0; // counts the number of parts pased per line.
         bool bSet[] = {false, false, false}; // Checks if colors are set
         int iRGBcolor = 0; // holds the color index
-
+        
         while(getline(ifile,sLine))
         {
             istringstream iss(sLine);
-
+            
             if(sLine[0] == '#')
-            { // Either a comment or cosmetic setting
+            {
                 iss >> sTemp;
                 if(sTemp == "#color=")
-                { // Sets the text color to the given value (user input)
+                {
                     iss >> sTemp;
                     iRGBcolor = atoi(sTemp.c_str());
                     if (iRGBcolor < 16)
@@ -69,7 +63,7 @@ _path SetPath()
                     bSet[0] = true;
                 }
                 else if(sTemp == "#bgcolor=")
-                { // Sets the background color to the given value
+                {
                     iss >> sTemp;
                     iRGBcolor = atoi(sTemp.c_str());
                     if (iRGBcolor < 16)
@@ -83,7 +77,7 @@ _path SetPath()
                     bSet[1] = true;
                 }
                 else if(sTemp == "#dircolor=")
-                { // Sets the directory color to the given value (this text: C:/>)
+                {
                     iss >> sTemp;
                     iRGBcolor = atoi(sTemp.c_str());
                     if (iRGBcolor < 16)
@@ -103,26 +97,17 @@ _path SetPath()
             }
             else
             {
-				// TODO: Redo this section, the do while loop is completely redundant
-				// and could be replaced by a much simpler and tidier solution.
-
                 do
-                { // Iterates through the line, reading executable paths to their vector, then alias' to their vector
+                {
                     iss >> sTemp;
 
-<<<<<<< HEAD
-=======
                     // Splits the executable path from the alias, 0 = executable, 1 = alias
->>>>>>> origin/master
                     if (temp == 0)
                     {
                         if (DEBUG)
                         {
                             cout << sTemp << iCount << endl;
                         }
-<<<<<<< HEAD
-
-=======
                         
                         // Allows programs (when run off a flash drive) to be dynamic
                         if(sTemp[0] == ':' && sTemp[1] == '/' || sTemp[0] == ':' && sTemp[1] == '\\')
@@ -130,7 +115,6 @@ _path SetPath()
                             sTemp = path.sOrigin[0] + sTemp;
                         }
                         
->>>>>>> origin/master
                         path.sExecutable.push_back(sTemp);
                         temp++; // 1
                     }
@@ -140,7 +124,7 @@ _path SetPath()
                         {
                             cout << sTemp << iCount << endl;
                         }
-
+                        
                         path.sAlias.push_back(sTemp);
                         iCount++;
                         temp++; // 2
@@ -153,7 +137,7 @@ _path SetPath()
                 while (iss);
             }
         }
-
+        
         if(!bSet[0])
         {
             path.iColor = 15;
@@ -190,7 +174,7 @@ _path SetPath()
                     {
                         cout << "Executable: " << path.sExecutable[i] << "\n";
                         cout << "Alias: ";
-                        if(path.sAlias.size() > i)
+                        if(path.sAlias.size() >= i)
                         {
                             cout << path.sAlias[i] << "\n";
                         }
@@ -206,8 +190,8 @@ _path SetPath()
                     for(int i = 0; i < path.sAlias.size(); i++)
                     {
                         cout << "Executable: ";
-
-                        if(path.sExecutable.size() > i)
+                        
+                        if(path.sExecutable.size() >= i)
                         {
                             cout << path.sExecutable[i] << "\n";
                         }
@@ -215,7 +199,7 @@ _path SetPath()
                         {
                             cout << "<Not Set>" << "\n";
                         }
-
+                        
                         cout << "Alias: " << path.sAlias[i] << "\n";
                     }
                 }
@@ -231,7 +215,7 @@ _path SetPath()
                 system("cls"); // Clears the screen and proceeds to start the program
             }
         }
-
+        
     }
     else
     {
@@ -243,6 +227,6 @@ _path SetPath()
 
     path.iColor = path.iColor + path.iBgcolor * 16;
     path.iDircolor = path.iDircolor + path.iBgcolor * 16;
-
+    
     return path;
 }
