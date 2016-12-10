@@ -1,4 +1,4 @@
-// Title: SCEW (Simple Console Emulator for Windows)
+// Title: ASCEW (A Simple Console Emulator for Windows)
 // Author: dandreas
 // Description: 'Emulates' a windows console, useful for systems that restrict the use of cmd.exe.
 
@@ -19,26 +19,25 @@ int main()
     HANDLE hConsole; // Handle for console colors
     string sTempColorVar = "color ";
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    
-    const double VERSION = 1.30; // Build version number. Patch updates aren't displayed
-    const double UPDATE = 1; // Updates since last version
-    
-    const std::string AUTHOR = "dandreas (GitHub)";
-    
+
+    const double VERSION = 1.50; // Build version number. Patch updates aren't displayed
+
+    const std::string AUTHOR = "dandreas";
+
     _path pPath = SetPath(); // Grabs settings from the local settings file
-    
+
     std::string sInput = ""; // Stores the user input
     std::string sTitle = ""; // Title for the application
     std::string sDirectory = ""; // Stores the working directory
-    
+
     sDirectory = _getcwd(NULL, 0); // Gets the directory
-    sTitle = "SCEW " + sDirectory;
+    sTitle = "ASCEW " + sDirectory;
     SetConsoleTitle(sTitle.c_str()); // Sets the console name
 
     SetConsoleTextAttribute(hConsole,pPath.iColor);
     system("cls");
-    
-    cout << "A Simple Console Emulator for Windows (ASCEW) v" << VERSION << "u" << UPDATE << endl
+
+    cout << "A Simple Console Emulator for Windows (ASCEW) v" << VERSION << endl
          << "Made by: " << AUTHOR
          << "\n" << "\n";
 
@@ -47,7 +46,7 @@ int main()
     {
         cout << "Number of custom commands: " <<  pPath.count << "\n";
     }
-    
+
     while(true)
     {
         bool bCustom = false; // Tells if a custom command is being used
@@ -56,7 +55,7 @@ int main()
         cout << sDirectory << ">";
         SetConsoleTextAttribute(hConsole,pPath.iColor);
         getline(cin,sInput);
-        
+
         // If there isn't a config file, skip the whole jazz
         if(pPath.bIsActive)
         {
@@ -75,7 +74,7 @@ int main()
                 }
             }
         }
-        
+
         // Runs the appropriate function per the user's input
         if(bCustom)
         {
@@ -112,7 +111,7 @@ int main()
             // Runs the user input in cmd (hopefully) bypassing any console locks
             system(sInput.c_str());
         }
-        
+
         cout << endl;
     }
 }
