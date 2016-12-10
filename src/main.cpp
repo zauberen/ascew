@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
         hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     }
 
-    const double VERSION = 1.30; // Version number, used for releases.
+    const double VERSION = 1.50; // Version number, used for releases.
 
     const std::string AUTHOR = "dandreas";
 
