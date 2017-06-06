@@ -11,7 +11,7 @@ For nightly builds: master/bin
 
 For stable builds: The release tab
 
-Then copy ascew.exe and (optionally) the config file into the directory of your choice
+Then copy ascew.exe, the libraries (dll files), and optionally the config file into the directory of your choice
 
 ## Tested in:
 Unrestricted: Windows 10, 7 (both passing)
