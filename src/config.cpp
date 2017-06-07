@@ -19,9 +19,10 @@ using namespace std;
 _path SetPath()
 {
     _path path;
-    path.sOrigin = _getcwd(NULL, 0);
-    path.bIsActive = false;
-    path.count = 0;
+    path.sOrigin = _getcwd(NULL, 0); // Gets the directory of the application (Mobile Install)
+    // path.sOrigin = "%HOMEPATH%" // Sets the origin path at the user's home directory (Normal Install)
+    path.bIsActive = false; // Automatically assumes a config file is not present (this is changed if necessary later)
+    path.count = 0; // 
 
     ifstream ifile(".ascew");
 

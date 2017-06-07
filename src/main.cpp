@@ -17,6 +17,8 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+    const std::string AUTHOR = "dandreas (GitHub.com/dandreas/ascew)";
+    const double VERSION = 1.51; // Version number, used for releases.
     // Startup command checks
     bool bBasic = false; // if true, runs the most basic console emulator, skips reading any configuration files, etc.
     bool bNoText = false; // if true, hides the opening text
@@ -62,10 +64,6 @@ int main(int argc, char* argv[])
         hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     }
 
-    const double VERSION = 1.50; // Version number, used for releases.
-
-    const std::string AUTHOR = "dandreas";
-
     _path pPath;
 
     if(!bBasic)
@@ -90,6 +88,7 @@ int main(int argc, char* argv[])
     if(!bNoText)
     {
         cout << "A Simple Console Emulator for Windows (ASCEW) v" << VERSION << endl
+             << "This is free software liscenced under version 3 of the the General Public License" << endl
              << "Made by: " << AUTHOR
              << "\n" << "\n";
     }

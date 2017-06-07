@@ -4,7 +4,7 @@ Maybe not quite the emulator you're thinking of (because it runs in the basic co
 
 Great for using the cmd utility when the network admin has restricted access to it. The editor also comes with a config file system where you can run apps with a set alias configured within, it's best used for simplifying windows commands (eg dir to ls or cls to clear).
 
-# To Install
+## To Install
 
 Get the files:
 For nightly builds: master/bin
