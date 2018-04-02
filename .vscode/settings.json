@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "xlocmon": "cpp",
+        "xutility": "cpp",
+        "xstddef": "cpp",
+        "system_error": "cpp",
+        "xfunctional": "cpp",
+        "xstring": "cpp"
+    }
+}

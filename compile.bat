@@ -4,6 +4,6 @@
 @ECHO off
 
 windres -O coff src/icon.rc -o icon.res
-g++ -o bin/ascew.exe src/main.cpp src/config.cpp icon.res
+g++ -std=c++11 -o bin/ascew.exe src/main.cpp src/ascewapi.cpp src/config.cpp src/console.cpp icon.res
 del icon.res
 pause

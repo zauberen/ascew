@@ -1,0 +1,14 @@
+This should be temporary, do not commit me.
+console class: finished
+
+config class: Hardly started
+    -All variables in _conf need getters and setters: yes
+        -Written?: yes
+    -readConfig needs to be written: yes (not complete, needs testing)
+        -started. Possibly replace with a json library? 
+        -Gonna use this lib: https://github.com/nlohmann/json
+    -checkInput needs to be moved from console::parse and adapted: yes
+    -remove _path and all references to it, also remove SetPath() (this should be done at the end.): yes
+
+ascewapi class: Nearly finished
+    -getMiscInput function + override need to be written: yes
