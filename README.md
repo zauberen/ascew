@@ -1,4 +1,5 @@
 # A Simple Console Emulator for Windows
+[![CodeFactor](https://www.codefactor.io/repository/github/dandreas/ascew/badge)](https://www.codefactor.io/repository/github/dandreas/ascew)
 
 Maybe not quite the emulator you're thinking of (because it runs in the basic console) however, it adds functionality, along with customization to an otherwise normal console.
 
