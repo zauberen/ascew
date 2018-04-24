@@ -6,23 +6,18 @@
 #include <sstream> // for stringstream, used in various places
 #include <vector> // for vector, used in various places
 #include <windows.h> // for system() and cosmetic functions
+#include <cstdlib>
 
-#include "console.h" // source header file
+#include "ascewapi.hpp" // API for outpu-t
+#include "console.hpp" // source header file
+#include "config.hpp" // config file backend
 
-#include "ascewapi.h" // API for outpu-t
-#include "config.h" // config file backend
-
-using namespace std;
+// using namespace std;
 
 // <constructors>
-console::console()
+console::console(bool debug = false, bool noTextMode = false, bool basicMode = false, ascewapi api = ascewapi(), config ascewconf = config())
 {
-	// Initialize variables
-	bool debug = false; // default
-	bool noTextMode = false;
-	bool basicMode = false;
-
-	ascewConfig = new config();
+	ascewConfig = ascewconf;
 	setCurrentDir(ascewConfig.getStartFolder());
 	
 	if (!basicMode)
@@ -37,48 +32,7 @@ console::console()
 	ascewConfig.setBasicMode(basicMode);
 	
 	// Send the api a copy of the configuration struct
-	apiHandle = new ascewapi();
-	apiHandle.setConf(ascewConfig.getConf());
-
-	// Pre-execution debug stuff
-	if (ascewConfig.getDebug())
-	{
-		if(!ascewConfig.getBasicMode())
-		{
-			apiHandle.alert("Number of custom commands: " + ascewConfig.getAliasCount());
-			// old: cout + "Number of custom commands: " +  pPath.count + "\n";
-		}
-		else
-		{
-			apiHandle.alert("Custom commands are disabled");
-			// old: cout + "Custom commands are disabled." + endl;
-		}
-	}
-
-	if (ascewConfig.getDebug())
-		apiHandle.alert("LOC: console::console\ncurrentDir = " + currentDir + "\n" + "");
-
-	greeting();
-}
-
-console::console(bool debug, bool noTextMode, bool basicMode)
-{
-	ascewConfig = new config();
-	setCurrentDir(ascewConfig.getStartFolder());
-	
-	if (!basicMode)
-	{
-		ascewConfig.readConfig();
-		
-	}
-
-	// Set the variables to those set above, overrides the config file.
-	ascewConfig.setDebug(debug);
-	ascewConfig.setNoTextMode(noTextMode);
-	ascewConfig.setBasicMode(basicMode);
-	
-	// Send the api a copy of the configuration struct
-	apiHandle = new ascewapi();
+	apiHandle = api;
 	apiHandle.setConf(ascewConfig.getConf());
 
 	// Pre-execution debug stuff
@@ -158,7 +112,6 @@ void console::parse(std::string text)
 	else
 	{
 		// Runs the user input in cmd
-		// TODO: send this output to apiHandle.print()
 		system(text.c_str());
 	}
 }
@@ -166,7 +119,7 @@ void console::parse(std::string text)
 void console::greeting()
 {
 	author = "dandreas (GitHub.com/dandreas/ascew)";
-	version = 2.00; // Version number, used for releases
+	version = "1.20180424"; // Version number, used for releases
 
 	if(!ascewConfig.getNoTextMode())
 	{
@@ -202,7 +155,7 @@ _conf console::getConf()
 	return ascewConfig.getConf();
 }
 
-std::string console::getCurrentDir(std::string path)
+std::string console::getCurrentDir()
 {
 	return currentDir;
 }
@@ -213,12 +166,14 @@ void console::setConf(_conf c)
 {
 	ascewConfig.setConf(c);
 }
+
 void console::setCurrentDir(std::string path)
 {
 	try
 	{
 		// Sets the working directory
-		SetCurrentDirectory(path.c_str()); 
+		LPCSTR t = path.c_str(); // !this works even though it throws an error!
+		SetCurrentDirectory(t); 
 
 		// Set the directory variable if the path has changed
 		if (currentDir != (std::string)_getcwd(NULL,0))

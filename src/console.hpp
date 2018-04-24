@@ -12,14 +12,13 @@
  *  version number found in config.h and ascewapi.h.
  */
 
-#include "config.h"
-#include "ascewapi.h"
+#include "config.hpp"
+#include "ascewapi.hpp"
 
 class console
 {
 public:
-	console(); // default constructor
-	console(bool debug, bool noTextMode, bool basicMode); // Allows you to define the modes active at startup
+	console(bool debug, bool noTextMode, bool basicMode, ascewapi api, config conf);
 
 	void parse(std::string text); // This function parses user input and will output with ascewapi.print the results.
 	void greeting(); // prints the greeting if config.settings.noTextMode is false
@@ -34,7 +33,7 @@ private:
 	void help();
 
 	// Version/author
-	double version;
+	std::string version;
 	std::string author;
 
 	ascewapi apiHandle; // Required for functioning with the front-end

@@ -1,0 +1,34 @@
+{
+    "aliases": {
+        "alias": [
+            "ls",
+            "nano",
+            "emacs",
+            "ifconfig",
+            "clear",
+            "g++",
+            "gcc"
+        ],
+        "executable": [
+            "dir",
+            "Z:\\nano-2.5.1\\nano-2.5.1-win32\\nano.exe",
+            "Z:/Emacs/Emacs24.5/bin/runemacs.exe",
+            "ipconfig",
+            "cls",
+            "Z:\\MinGW\\bin\\g++.exe",
+            "Z:\\MinGW\\bin\\gcc.exe"
+        ]
+    },
+    "basicMode": true,
+    "bgColor": 0,
+    "debug": false,
+    "dirColor": 12,
+    "guiBgColor": "",
+    "guiDirColor": "",
+    "guiInputColor": "",
+    "guiOutputColor": "",
+    "inputTextColor": 15,
+    "noTextMode": true,
+    "outputTextColor": 15,
+    "startFolder": ""
+}

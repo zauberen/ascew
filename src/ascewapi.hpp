@@ -10,8 +10,11 @@
  *  version number found in config.h and console.h. Further versions may have more required functions.
  */
 
+#include <string>
 #include <vector>
 #include <windows.h>
+
+LPCWSTR s2lpcwstr(const std::string& s); // hack to make strings compliant for some windows functions
 
 typedef struct 
 {
@@ -53,5 +56,4 @@ private:
 	_conf settings; //This is here to allow access to things such as color variables in the api.
 	HANDLE hConsole; // Handle for console colors
 };
-
 #endif

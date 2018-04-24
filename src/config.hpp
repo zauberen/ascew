@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 #include <vector>
-#include "ascewapi.h"
+#include "ascewapi.hpp"
 
 /** Config Back-end v2.0.0
  * This class handles all configuration file-based backend work.

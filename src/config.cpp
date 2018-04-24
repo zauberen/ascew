@@ -7,9 +7,10 @@
 #include <stdlib.h>  // atoi
 #include <sstream>   // for parsing .ascew
 #include <vector>	// for vectors
+#include <iterator>
 
-#include "config.h" // Everything for .ascew files
-#include "ascewapi.h"
+#include "ascewapi.hpp"
+#include "config.hpp" // Everything for .ascew files
 #include "json.hpp" // json parser
 
 using json = nlohmann::json; //for ease of access to the json parser
@@ -20,6 +21,8 @@ config::config()
 	// Initialize to defaults
 	settings.originFolder = _getcwd(NULL, 0);
 	settings.startFolder = getenv("HOMEPATH");
+	settings.originFolder += "\\";
+	settings.startFolder += "\\";
 	settings.basicMode = false;
 	settings.noTextMode = false;
 	settings.configPresent = false;
@@ -39,7 +42,7 @@ config::config()
 	settings.dirColor = settings.dirColor + settings.bgColor * 16;
 	settings.outputTextColor = settings.outputTextColor + settings.bgColor * 16;
 
-	apiHandle = new ascewapi();
+	apiHandle = ascewapi();
 
 	apiHandle.setConf(settings);
 }
@@ -59,6 +62,27 @@ bool config::readConfig()
 		{
 			settings.configPresent = true;
 			i >> jsonReader;
+			try
+			{
+				settings.startFolder = jsonReader["startFolder"];
+				settings.basicMode = jsonReader["basicMode"];
+				settings.noTextMode = jsonReader["noTextMode"];
+				settings.debug = jsonReader["debug"];
+				settings.inputTextColor = jsonReader["inputTextColor"];
+				settings.outputTextColor = jsonReader["outputTextColor"];
+				settings.bgColor = jsonReader["bgColor"];
+				settings.dirColor = jsonReader["dirColor"];
+				
+				//TODO: Fix this stuff 
+				std::vector<std::string> executable<std::string>.insert(executable.begin(), std::begin(jsonReader["aliases"]["executable"]), std::end(jsonReader["aliases"]["executable"]));
+				std::vector<std::string> alias<std::string>.insert(alias.begin(), std::begin(jsonReader["aliases"]["alias"]), std::end(jsonReader["aliases"]["alias"]));
+				// settings.alias
+				// settings.executable
+			}
+			catch (...)
+			{
+				apiHandle.alert("Something went wrong with the jsonreader");
+			}
 		}
 		else
 		{
@@ -70,6 +94,8 @@ bool config::readConfig()
 				apiHandle.alert("Using legacy config file");
 				i.close();
 				settings = SetPath();
+				apiHandle.alert("Creating new config based upon legacy config");
+				createConfig();
 			}
 			else
 			{
@@ -108,8 +134,9 @@ void config::saveConfig()
 
 	try
 	{
-		ofstream o(settings.originFolder + "ascew/settings-m.json");
+		ofstream o(settings.originFolder + "settings-m.json");
 		o << std::setw(4) << jsonSettings << endl;
+		o.close();
 	}
 	catch (...)
 	{
@@ -119,7 +146,36 @@ void config::saveConfig()
 }
 
 void config::createConfig()
-{
+{ // not sure if needed
+	json jsonSettings; // Used to convert _conf to json
+
+	// Store all of the settings to json keys
+	jsonSettings["startFolder"] = settings.startFolder;
+	jsonSettings["basicMode"] = settings.basicMode;
+	jsonSettings["noTextMode"] = settings.noTextMode;
+	jsonSettings["debug"] = settings.debug;
+	jsonSettings["inputTextColor"] = settings.inputTextColor;
+	jsonSettings["outputTextColor"] = settings.outputTextColor;
+	jsonSettings["guiInputColor"] = settings.guiInputColor;
+	jsonSettings["guiOutputColor"] = settings.guiOutputColor;
+	jsonSettings["guiBgColor"] = settings.guiBgColor;
+	jsonSettings["guiDirColor"] = settings.guiDirColor;
+	jsonSettings["bgColor"] = settings.bgColor;
+	jsonSettings["dirColor"] = settings.dirColor;
+	jsonSettings["aliases"]["executable"] = settings.executable;
+	jsonSettings["aliases"]["alias"] = settings.alias;
+
+	try
+	{
+		ofstream o(settings.originFolder + "settings-m.json");
+		o << std::setw(4) << jsonSettings << endl;
+		o.close();
+	}
+	catch (...)
+	{
+		apiHandle.alert("Unable to save config");
+	}
+	apiHandle.setConf(settings);
 }
 
 std::string config::checkInput(std::string text)

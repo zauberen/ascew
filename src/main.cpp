@@ -7,9 +7,9 @@
 #include <vector>	// for vector, used in various places
 #include <windows.h> // for system() and cosmetic functions
 
-#include "config.h"   // The config backend (handles .ascew)
-#include "console.h"  // The console backend (handles console input)
-#include "ascewapi.h" // API for output handles in the backend
+#include "config.hpp"   // The config backend (handles .ascew)
+#include "console.hpp"  // The console backend (handles console input)
+#include "ascewapi.hpp" // API for output handles in the backend
 
 using namespace std;
 
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	console ascew(DEBUG, bNoText, bBasic);
+	console ascew(DEBUG, bNoText, bBasic, ascewapi(), config());
 	conf = ascew.getConf();
 	// End startup
 
