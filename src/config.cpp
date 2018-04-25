@@ -49,7 +49,7 @@ config::config()
 
 bool config::readConfig()
 {
-	/* When this is actually finished (it's not rn...) this is required for proper functioning of colors.
+	/* When this is actually finished this is required for proper functioning of colors.
 	conf.inputTextColor = conf.inputTextColor + conf.bgColor * 16;
 	conf.dirColor = conf.dirColor + conf.bgColor * 16;
 	*/
@@ -57,10 +57,12 @@ bool config::readConfig()
 	{
 		json jsonReader;
 
-		ifstream i(settings.originFolder + "settings-m.json");
+		ifstream i(settings.originFolder + "settings.json");
 		if (i)
 		{
-			settings.configPresent = true;
+			// Check for a json configuration file
+			//TODO: Once the json config is ready, uncomment below
+			// settings.configPresent = true;
 			i >> jsonReader;
 			try
 			{
@@ -74,8 +76,10 @@ bool config::readConfig()
 				settings.dirColor = jsonReader["dirColor"];
 				
 				//TODO: Fix this stuff 
+				/*
 				std::vector<std::string> executable<std::string>.insert(executable.begin(), std::begin(jsonReader["aliases"]["executable"]), std::end(jsonReader["aliases"]["executable"]));
 				std::vector<std::string> alias<std::string>.insert(alias.begin(), std::begin(jsonReader["aliases"]["alias"]), std::end(jsonReader["aliases"]["alias"]));
+				*/
 				// settings.alias
 				// settings.executable
 			}
@@ -86,6 +90,7 @@ bool config::readConfig()
 		}
 		else
 		{
+			// Checks for a .ascew file instead
 			i.close();
 			i.open(settings.originFolder + ".ascew");
 			if (i)
@@ -95,7 +100,7 @@ bool config::readConfig()
 				i.close();
 				settings = SetPath();
 				apiHandle.alert("Creating new config based upon legacy config");
-				createConfig();
+				saveConfig();
 			}
 			else
 			{
@@ -134,40 +139,7 @@ void config::saveConfig()
 
 	try
 	{
-		ofstream o(settings.originFolder + "settings-m.json");
-		o << std::setw(4) << jsonSettings << endl;
-		o.close();
-	}
-	catch (...)
-	{
-		apiHandle.alert("Unable to save config");
-	}
-	apiHandle.setConf(settings);
-}
-
-void config::createConfig()
-{ // not sure if needed
-	json jsonSettings; // Used to convert _conf to json
-
-	// Store all of the settings to json keys
-	jsonSettings["startFolder"] = settings.startFolder;
-	jsonSettings["basicMode"] = settings.basicMode;
-	jsonSettings["noTextMode"] = settings.noTextMode;
-	jsonSettings["debug"] = settings.debug;
-	jsonSettings["inputTextColor"] = settings.inputTextColor;
-	jsonSettings["outputTextColor"] = settings.outputTextColor;
-	jsonSettings["guiInputColor"] = settings.guiInputColor;
-	jsonSettings["guiOutputColor"] = settings.guiOutputColor;
-	jsonSettings["guiBgColor"] = settings.guiBgColor;
-	jsonSettings["guiDirColor"] = settings.guiDirColor;
-	jsonSettings["bgColor"] = settings.bgColor;
-	jsonSettings["dirColor"] = settings.dirColor;
-	jsonSettings["aliases"]["executable"] = settings.executable;
-	jsonSettings["aliases"]["alias"] = settings.alias;
-
-	try
-	{
-		ofstream o(settings.originFolder + "settings-m.json");
+		ofstream o(settings.originFolder + "settings.json");
 		o << std::setw(4) << jsonSettings << endl;
 		o.close();
 	}
